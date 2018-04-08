@@ -113,7 +113,7 @@ function M.new( options )
 	    
 	    elseif self.x < -self.radius +_L then
 
-	    	self.pos.x = width + self.radius
+	    	self.x = _R + self.radius
 	    
 	    end
 
