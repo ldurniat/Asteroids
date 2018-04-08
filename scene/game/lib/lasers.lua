@@ -89,8 +89,7 @@ function M.new( options )
 
 	function instance:update()
 	
-		self.x = self.x + self.velocity.x 
-		self.y = self.y + self.velocity.y	
+		self:translate( self.velocity.x, self.velocity.y )
 
 	end
 

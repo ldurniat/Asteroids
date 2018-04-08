@@ -127,8 +127,7 @@ function M.new( options )
 
 		end
 		
-		self.x = self.x + self.velocity.x 
-		self.y = self.y + self.velocity.y	
+		self:translate( self.velocity.x, self.velocity.y )	
 
 		self.velocity.x = self.velocity.x * 0.99
 		self.velocity.y = self.velocity.y * 0.99
