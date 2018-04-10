@@ -69,7 +69,8 @@ end
 -- In every frame we update position of ship, asteroids and lasers. 
 -- Also we detect collision between lasers and asteroids.
 local function enterFrame( event )
-
+      
+   ship:edges()
    ship:turn()
    ship:update()
 

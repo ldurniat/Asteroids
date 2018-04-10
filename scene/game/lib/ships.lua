@@ -60,6 +60,11 @@ function M.new( options )
 	-- Get the current scene group
 	local parent = display.currentStage
 
+	local _T = display.screenOriginY
+	local _B = display.viewableContentHeight - display.screenOriginY
+	local _L = display.screenOriginX
+	local _R = display.viewableContentWidth - display.screenOriginX
+
 	-- Default options for instance
 	options = options or {}
 
@@ -88,6 +93,7 @@ function M.new( options )
 	instance.isAccelerating = isAccelerating
 	instance.velocity = velocity
 	instance.lasers = {}
+	instance.radius = radius
 
 	function instance:setRotation( angle )
 
@@ -137,6 +143,30 @@ function M.new( options )
 		
 		local laser = lasers.new( { x=instance.x, y=instance.y, heading=instance.rotation } )	
 		instance.lasers[#instance.lasers + 1] = laser
+
+	end
+
+	function instance:edges()
+	
+		if  self.x > _R + self.radius then
+	    
+	    	self.x = -self.radius + _L
+	    
+	    elseif self.x < -self.radius + _L then
+
+	    	self.x = _R + self.radius
+	    
+	    end
+
+	    if self.y > _B + self.radius then
+
+	    	self.y = -self.radius + _T
+
+	    elseif self.y < -self.radius + _T then
+
+	      self.y = _B + self.radius
+
+	    end
 
 	end
 
