@@ -57,9 +57,8 @@ end
 ------------------------------------------------------------------------------------------------
 function M.new( options )
 
-	-- Get the current scene
-	local scene = composer.getScene( composer.getSceneName( 'current' ) )
-	local parent = scene.view
+	-- Get the current scene group
+	local parent = display.currentStage
 
 	-- Default options for instance
 	options = options or {}

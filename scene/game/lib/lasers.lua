@@ -67,9 +67,8 @@ function M.new( options )
 	local _L  = display.screenOriginX
 	local _R  = display.viewableContentWidth - display.screenOriginX
 
-	-- Get the current scene
-	local scene = composer.getScene( composer.getSceneName( 'current' ) )
-	local parent = scene.view
+	-- Get the current scene group
+	local parent = display.currentStage
 
 	-- Default options for instance
 	options = options or {}
