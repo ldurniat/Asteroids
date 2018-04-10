@@ -120,7 +120,7 @@ function M.new( options )
 
 	function instance:turn( value )
 
-		self.rotation = self.rotation + self.rotationByFrame
+		self:rotate( self.rotationByFrame )
 
 	end	
 
