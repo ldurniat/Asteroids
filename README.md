@@ -9,6 +9,10 @@ To run game you need install [Corona SDK](https://portal.coronalabs.com)
 
 Controls: Space and Arrows keys. 
 
+###Dependencies
+
+[deltatime](https://github.com/ldurniat/delta-time) - is very simple module for time based animations for Corona SDK.
+
 ### License
 
 This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/ldurniat/Asteroids/blob/master/LICENSE) file for details.

@@ -14,6 +14,7 @@
 local composer  = require 'composer' 
 local ships     = require 'scene.game.lib.ships' 
 local obstacles = require 'scene.game.lib.obstacles' 
+local deltatime = require 'scene.game.lib.deltatime'
 
 -- ------------------------------------------------------------------------------------------ --
 --                                 MODULE DECLARATION                                       --                 
@@ -69,14 +70,16 @@ end
 -- In every frame we update position of ship, asteroids and lasers. 
 -- Also we detect collision between lasers and asteroids.
 local function enterFrame( event )
+
+   local dt = deltatime.getTime()
       
    ship:edges()
-   ship:turn()
-   ship:update()
+   ship:turn( dt )
+   ship:update( dt )
 
    for i=1, #asteroids do
 
-      asteroids[i]:update()
+      asteroids[i]:update( dt )
       asteroids[i]:edges()
    
    end
@@ -89,7 +92,7 @@ local function enterFrame( event )
       -- Check if laser goes out of the screen
       if not laser:offScreen() then
 
-         laser:update()
+         laser:update( dt )
 
          for j=#asteroids, 1, -1 do
 

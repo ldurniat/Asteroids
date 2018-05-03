@@ -77,8 +77,8 @@ function M.new( options )
 	local y        = options.y        or 0
 	local velocity = options.velocity or vector2DFromAngle( options.heading  or 0 )
 
-	velocity.x = velocity.x * 3
-	velocity.y = velocity.y * 3
+	velocity.x = velocity.x * 0.3
+	velocity.y = velocity.y * 0.3
 
 	local instance = display.newRect( parent, x, y, 5, 5 )
 	local black = { 0, 0, 0 }
@@ -86,9 +86,9 @@ function M.new( options )
 	instance.strokeWidth = 3
 	instance.velocity = velocity
 
-	function instance:update()
+	function instance:update( dt )
 	
-		self:translate( self.velocity.x, self.velocity.y )
+		self:translate( self.velocity.x  * dt, self.velocity.y  * dt )
 
 	end
 

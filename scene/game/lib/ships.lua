@@ -50,7 +50,7 @@ end
 -- - `x`:		 		the center x position of the ship
 -- - `y`: 		 		the center y position of the ship
 -- - `isAccelerating`:  the boolean value indciating that the ship is accelerated
--- - `rotationByFrame`: the rotation angle by frame
+-- - `rotationSpeed`: the rotation angle by frame
 -- - `radius`: 			the radius of the smallest circle containing the ship (triangle)
 --
 -- @return The ship instance.
@@ -72,7 +72,7 @@ function M.new( options )
 	local y               = options.y               or 0
 	local velocity        = options.velocity        or { x=0, y=0 }
 	local isAccelerating  = options.isAccelerating  or false
-	local rotationByFrame = options.rotationByFrame or 0
+	local rotationSpeed   = options.rotationSpeed   or 0
 	local radius          = options.radius          or 25
 
 	-- Isosceles triangle
@@ -89,7 +89,7 @@ function M.new( options )
 	instance.strokeWidth = 3
 
 	-- Add basic properties
-	instance.rotationByFrame = rotationByFrame
+	instance.rotationSpeed = rotationSpeed
 	instance.isAccelerating = isAccelerating
 	instance.velocity = velocity
 	instance.lasers = {}
@@ -97,7 +97,7 @@ function M.new( options )
 
 	function instance:setRotation( angle )
 
-		self.rotationByFrame = angle
+		self.rotationSpeed = angle
 
 	end	
 
@@ -110,30 +110,25 @@ function M.new( options )
 	function instance:accelerate()
 
 		local force = vector2DFromAngle( self.rotation  )
-		force.x = force.x * 0.1 
-		force.y = force.y * 0.1
+		force.x = force.x * 0.007 
+		force.y = force.y * 0.007
 
 		self.velocity.x = self.velocity.x + force.x
 		self.velocity.y = self.velocity.y + force.y
 
 	end	
 
-	function instance:turn( value )
+	function instance:turn( dt )
 
-		self:rotate( self.rotationByFrame )
+		self:rotate( self.rotationSpeed * dt )
 
 	end	
 
-	function instance:update()
+	function instance:update( dt )
 
-		if self.isAccelerating then
+		if self.isAccelerating then self:accelerate() end
 
-			self:accelerate()
-
-		end
-		
-		self:translate( self.velocity.x, self.velocity.y )	
-
+		self:translate( self.velocity.x * dt, self.velocity.y * dt )	
 		self.velocity.x = self.velocity.x * 0.99
 		self.velocity.y = self.velocity.y * 0.99
 
@@ -183,11 +178,11 @@ function M.new( options )
 
 			if 'right' == name then
 
-				instance:setRotation( 1 )
+				instance:setRotation( 0.1 )
 
 			elseif 'left' == name then
 
-				instance:setRotation( -1 )
+				instance:setRotation( -0.1 )
 
 			elseif 'up' == name then
 

@@ -70,7 +70,7 @@ function M.new( options )
 	local x        = options.x      or mRandom( _L, _R )
 	local y        = options.y      or mRandom( _T, _B )
 	local radius   = options.radius or mRandom( 18, 25 )
-	local velocity = options.velocity or { x=mRandom(), y=mRandom() }
+	local velocity = options.velocity or { x=mRandom() / 12, y=mRandom() / 12 }
 
 	local vertices = {}
 	local verticesNum = mRandom( 5, 10 )
@@ -87,9 +87,9 @@ function M.new( options )
 	instance.velocity = velocity
 	instance.radius = radius
 
-	function instance:update()
+	function instance:update( dt )
 	
-		self:translate( self.velocity.x, self.velocity.y )	
+		self:translate( self.velocity.x * dt, self.velocity.y  * dt )	
 
 	end	
 
