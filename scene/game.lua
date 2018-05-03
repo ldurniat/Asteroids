@@ -71,6 +71,7 @@ end
 -- Also we detect collision between lasers and asteroids.
 local function enterFrame( event )
 
+   local laser, asteroid
    local dt = deltatime.getTime()
       
    ship:edges()
@@ -79,15 +80,16 @@ local function enterFrame( event )
 
    for i=1, #asteroids do
 
-      asteroids[i]:update( dt )
-      asteroids[i]:edges()
+      asteroid = asteroids[i]
+      asteroid:update( dt )
+      asteroid:edges()
    
    end
 
    local lasers = ship.lasers
    for i=#lasers, 1, -1 do
 
-      local laser = lasers[i]
+      laser = lasers[i]
 
       -- Check if laser goes out of the screen
       if not laser:offScreen() then
@@ -96,7 +98,7 @@ local function enterFrame( event )
 
          for j=#asteroids, 1, -1 do
 
-            local asteroid = asteroids[j]
+            asteroid = asteroids[j]
             -- Detect collision
             if laser:hit( asteroid ) then
 
@@ -110,12 +112,10 @@ local function enterFrame( event )
                -- Remove asteroid
                table.remove( asteroids, j )
                display.remove( asteroid )
-               asteroid = nil
 
                -- Remove laser
                table.remove( lasers, i )
                display.remove( laser )
-               laser = nil
 
                break
 
@@ -128,7 +128,6 @@ local function enterFrame( event )
          -- Remove laser
          table.remove( lasers, i )
          display.remove( laser )
-         laser = nil
 
       end     
    
