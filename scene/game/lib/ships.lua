@@ -162,8 +162,8 @@ function M.new( options )
 
 	function group.fire()
 		
-		local laser = lasers.new( { x=ship.x, y=ship.y, heading=ship.rotation } )	
-		ship.lasers[#ship.lasers + 1] = laser
+		local laser = lasers.new( { x=group.x, y=group.y, heading=group.rotation } )	
+		group.lasers[#group.lasers + 1] = laser
 
 	end
 
@@ -236,7 +236,7 @@ function M.new( options )
 		local phase = event.phase
 		if phase == 'ended' then
 
-			ship.fire()
+			group.fire()
 
 		end
 
