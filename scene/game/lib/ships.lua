@@ -53,7 +53,7 @@ end
 -- - `rotationSpeed`: the rotation angle by frame
 -- - `radius`: 			the radius of the smallest circle containing the ship (triangle)
 --
--- @return The ship instance.
+-- @return The ship ship.
 ------------------------------------------------------------------------------------------------
 function M.new( options )
 
@@ -65,7 +65,7 @@ function M.new( options )
 	local _L = display.screenOriginX
 	local _R = display.viewableContentWidth - display.screenOriginX
 
-	-- Default options for instance
+	-- Default options for ship
 	options = options or {}
 
 	local x               = options.x               or 0
@@ -83,31 +83,39 @@ function M.new( options )
 	}
 	for i=1, #vertices do vertices[i] = vertices[i] * radius end	
 
-	local instance = display.newPolygon( parent, x, y, vertices )
-	local black = { 0, 0, 0 }
-	instance.fill = black
-	instance.strokeWidth = 3
-
+	local group = display.newGroup()
+	group.x = x
+	group.y = y
 	-- Add basic properties
-	instance.rotationSpeed = rotationSpeed
-	instance.isAccelerating = isAccelerating
-	instance.velocity = velocity
-	instance.lasers = {}
-	instance.radius = radius
+	group.rotationSpeed = rotationSpeed
+	group.isAccelerating = isAccelerating
+	group.velocity = velocity
+	group.lasers = {}
+	group.radius = radius
 
-	function instance:setRotation( angle )
+	-- Create tail
+	local tail   = display.newPolygon( group, 0, 0, vertices )
+	tail:scale( -0.4, 0.4 )
+	tail:translate( -1.5 * radius, 0 )
+	-- Create ship
+	local ship = display.newPolygon( group, 0, 0, vertices )
+	local black = { 0, 0, 0 }
+	ship.fill = black
+	ship.strokeWidth = 3
+
+	function group:setRotation( angle )
 
 		self.rotationSpeed = angle
 
 	end	
 
-	function instance:setAccelerate( value )
+	function group:setAccelerate( value )
 
 		self.isAccelerating = value
 
 	end	
 
-	function instance:accelerate()
+	function group:accelerate()
 
 		local force = vector2DFromAngle( self.rotation  )
 		force.x = force.x * 0.007 
@@ -118,15 +126,24 @@ function M.new( options )
 
 	end	
 
-	function instance:turn( dt )
+	function group:turn( dt )
 
 		self:rotate( self.rotationSpeed * dt )
 
 	end	
 
-	function instance:update( dt )
+	function group:update( dt )
 
-		if self.isAccelerating then self:accelerate() end
+		if self.isAccelerating then
+
+			self:accelerate()
+			self.tail.isVisible = true
+
+		else
+		
+			self.tail.isVisible = false	
+
+		end
 
 		self:translate( self.velocity.x * dt, self.velocity.y * dt )	
 		self.velocity.x = self.velocity.x * 0.99
@@ -134,14 +151,14 @@ function M.new( options )
 
 	end	
 
-	function instance.fire()
+	function group.fire()
 		
-		local laser = lasers.new( { x=instance.x, y=instance.y, heading=instance.rotation } )	
-		instance.lasers[#instance.lasers + 1] = laser
+		local laser = lasers.new( { x=ship.x, y=ship.y, heading=ship.rotation } )	
+		ship.lasers[#ship.lasers + 1] = laser
 
 	end
 
-	function instance:edges()
+	function group:edges()
 	
 		if  self.x > _R + self.radius then
 	    
@@ -178,26 +195,26 @@ function M.new( options )
 
 			if 'right' == name then
 
-				instance:setRotation( 0.1 )
+				group:setRotation( 0.1 )
 
 			elseif 'left' == name then
 
-				instance:setRotation( -0.1 )
+				group:setRotation( -0.1 )
 
 			elseif 'up' == name then
 
-				instance:setAccelerate( true )
+				group:setAccelerate( true )
 
 			elseif 'space' == name then
 
-				instance.fire()
+				group.fire()
 
 			end
 
 		elseif phase == 'up' then
 			
-			instance:setRotation( 0 )
-			instance:setAccelerate( false )
+			group:setRotation( 0 )
+			group:setAccelerate( false )
 
 		end
 
@@ -210,28 +227,34 @@ function M.new( options )
 		local phase = event.phase
 		if phase == 'ended' then
 
-			instance.fire()
+			ship.fire()
 
 		end
 
 	end	
 
-	function instance:finalize()
+	function group:finalize()
 
-		-- On remove, cleanup instance, or call directly for non-visual
+		-- On remove, cleanup ship, or call directly for non-visual
 		Runtime:removeEventListener( 'key', key )
 		Runtime:removeEventListener( 'touch', touch )
 
 	end
 
 	-- Add a finalize listener (for display objects only, comment out for non-visual)
-	instance:addEventListener( 'finalize' )
+	group:addEventListener( 'finalize' )
 
 	-- Add our key/joystick listeners
 	Runtime:addEventListener( 'key', key )	
 	Runtime:addEventListener( 'touch', touch )
 
-	return instance
+	-- Reference
+	group.tail = tail
+	group.ship = ship
+
+	parent:insert( group )
+
+	return group
 	
 end	
 
