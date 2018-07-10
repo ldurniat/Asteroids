@@ -31,6 +31,12 @@ local mRad = math.rad
 -- ------------------------------------------------------------------------------------------ --
 --                                 PRIVATE METHODS                                            --	
 -- ------------------------------------------------------------------------------------------ --
+-- Isosceles triangle
+local vertices = { 
+	mCos(  mRad( 0 ) ) * 1.5, mSin(  mRad( 0 ) ) * 1.5, 
+	mCos( mRad( 120 ) ), mSin( mRad( 120 ) ), 
+	mCos( mRad( 240 ) ), mSin( mRad( 240 ) ), 
+}
 
 local function vector2DFromAngle( angle )
 
@@ -41,6 +47,18 @@ end
 -- ------------------------------------------------------------------------------------------ --
 --                                 PUBLIC METHODS                                             --	
 -- ------------------------------------------------------------------------------------------ --
+
+local function addTrail( group )
+
+	-- Create tail
+	local tail   = display.newPolygon( group.parent, group.x, group.y, vertices )
+	tail:scale( -0.4, 0.4 )
+	tail:translate( -1.5 * group.radius * mCos( mRad( group.rotation ) ), -1.5 * group.radius * mSin( mRad( group.rotation ) ) )
+	tail:rotate( group.rotation )
+
+	transition.to( tail, { xScale=0, yScale=0, alpha=0, onComplete=display.remove } )
+
+end	
 
 ------------------------------------------------------------------------------------------------
 -- Constructor function of Ships module.
@@ -74,13 +92,7 @@ function M.new( options )
 	local isAccelerating  = options.isAccelerating  or false
 	local rotationSpeed   = options.rotationSpeed   or 0
 	local radius          = options.radius          or 25
-
-	-- Isosceles triangle
-	local vertices = { 
-		mCos(  mRad( 0 ) ) * 1.5, mSin(  mRad( 0 ) ) * 1.5, 
-		mCos( mRad( 120 ) ), mSin( mRad( 120 ) ), 
-		mCos( mRad( 240 ) ), mSin( mRad( 240 ) ), 
-	}
+	
 	for i=1, #vertices do vertices[i] = vertices[i] * radius end	
 
 	local group = display.newGroup()
@@ -93,10 +105,6 @@ function M.new( options )
 	group.lasers = {}
 	group.radius = radius
 
-	-- Create tail
-	local tail   = display.newPolygon( group, 0, 0, vertices )
-	tail:scale( -0.4, 0.4 )
-	tail:translate( -1.5 * radius, 0 )
 	-- Create ship
 	local ship = display.newPolygon( group, 0, 0, vertices )
 	local black = { 0, 0, 0 }
@@ -137,11 +145,12 @@ function M.new( options )
 		if self.isAccelerating then
 
 			self:accelerate()
-			self.tail.isVisible = true
+			--self.tail.isVisible = true
+			addTrail( group )
 
 		else
 		
-			self.tail.isVisible = false	
+			--self.tail.isVisible = false	
 
 		end
 
@@ -249,7 +258,6 @@ function M.new( options )
 	Runtime:addEventListener( 'touch', touch )
 
 	-- Reference
-	group.tail = tail
 	group.ship = ship
 
 	parent:insert( group )
