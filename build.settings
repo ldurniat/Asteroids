@@ -14,4 +14,9 @@ settings = {
             xlargeScreens = true,
         },
     },
+    -- Remove Solar2D Splash Screen
+    splashScreen = 
+    {
+        enable = false
+    },
 }
