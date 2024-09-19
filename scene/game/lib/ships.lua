@@ -31,9 +31,8 @@ local mRad = math.rad
 -- ------------------------------------------------------------------------------------------ --
 --                                 PRIVATE METHODS                                            --	
 -- ------------------------------------------------------------------------------------------ --
--- Isosceles triangle
 local vertices = { 
-	mCos(  mRad( 0 ) ) * 1.5, mSin(  mRad( 0 ) ) * 1.5, 
+	mCos( mRad( 0 ) ) , mSin(  mRad( 0 ) ), 
 	mCos( mRad( 120 ) ), mSin( mRad( 120 ) ), 
 	mCos( mRad( 240 ) ), mSin( mRad( 240 ) ), 
 }
@@ -100,7 +99,7 @@ function M.new( options )
 	group.lasers = {}
 	group.radius = radius
 
-	-- Create ship
+	-- Create equilateral triangle ship
 	local ship = display.newPolygon( group, 0, 0, vertices )
 	local black = { 0, 0, 0 }
 	ship.fill = black
