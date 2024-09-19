@@ -31,15 +31,11 @@ local scene = composer.newScene()
 -- ------------------------------------------------------------------------------------------ --
 
 local function concat ( tableA, tableB )
-
    for k, v in pairs( tableB ) do 
-
       tableA[ #tableA + 1 ] = v 
-
    end
 
    return tableA
-
 end 
 
 -- ------------------------------------------------------------------------------------------ --
@@ -50,7 +46,6 @@ local ship
 local asteroids = {}   
 
 function scene:create( event )
- 
    local sceneGroup = self.view
  
    local _CX = display.contentCenterX
@@ -59,18 +54,14 @@ function scene:create( event )
    ship = ships.new( { x=_CX, y=_CY } )
 
    for i=1, 10 do
-
       -- Create asteroids
       asteroids[i] = obstacles.new()
-   
    end
-
 end
 
 -- In every frame we update position of ship, asteroids and lasers. 
 -- Also we detect collision between lasers and asteroids.
 local function enterFrame( event )
-
    local laser, asteroid
    local dt = deltatime.getTime()
       
@@ -79,34 +70,26 @@ local function enterFrame( event )
    ship:update( dt )
 
    for i=1, #asteroids do
-
       asteroid = asteroids[i]
       asteroid:update( dt )
       asteroid:edges()
-   
    end
 
    local lasers = ship.lasers
    for i=#lasers, 1, -1 do
-
       laser = lasers[i]
 
       -- Check if laser goes out of the screen
       if not laser:offScreen() then
-
          laser:update( dt )
 
          for j=#asteroids, 1, -1 do
-
             asteroid = asteroids[j]
             -- Detect collision
             if laser:hit( asteroid ) then
-
                if asteroid.radius > 15 then
-
                   local newAsteroids = asteroid:breakup()
                   concat( asteroids, newAsteroids )
-
                end   
 
                -- Remove asteroid
@@ -118,53 +101,38 @@ local function enterFrame( event )
                display.remove( laser )
 
                break
-
             end   
-         
          end 
-
       else
-
          -- Remove laser
          table.remove( lasers, i )
          display.remove( laser )
-
       end     
-   
    end
-
 end 
  
 function scene:show( event )
- 
    local sceneGroup = self.view
    local phase = event.phase
  
    if phase == 'will' then
-
       -- Add listener
       Runtime:addEventListener( 'enterFrame', enterFrame )
-
    elseif phase == 'did' then
 
    end
-
 end
  
 function scene:hide( event )
- 
    local sceneGroup = self.view
    local phase = event.phase
  
    if phase == 'will' then
 
    elseif phase == 'did' then
-
       -- Remove listener
       Runtime:removeEventListener( 'enterFrame', enterFrame )
-
    end
-   
 end
 
 function scene:destroy( event )

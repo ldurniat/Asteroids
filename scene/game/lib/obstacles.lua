@@ -33,9 +33,7 @@ local mRandom = math.random
 -- ------------------------------------------------------------------------------------------ --
 
 local function vector2DFromAngle( angle )
-
 	return { x=mCos( mRad( angle ) ), y=mSin( mRad( angle ) ) }
-	
 end	
 
 -- ------------------------------------------------------------------------------------------ --
@@ -55,7 +53,6 @@ end
 -- @return The obstacle instance.
 ------------------------------------------------------------------------------------------------
 function M.new( options )
-
 	local _T  = display.screenOriginY
 	local _B  = display.viewableContentHeight - display.screenOriginY
 	local _L  = display.screenOriginX
@@ -88,48 +85,33 @@ function M.new( options )
 	instance.radius = radius
 
 	function instance:update( dt )
-	
 		self:translate( self.velocity.x * dt, self.velocity.y  * dt )	
-
 	end	
 
 	function instance:breakup()
-	
 		local newAsteroids = {
 			M.new( { x=self.x, y=self.y, radius=self.radius * 0.5 } ),
 			M.new( { x=self.x, y=self.y, radius=self.radius * 0.5 } )
 		}
 
 		return newAsteroids
-
 	end
 
 	function instance:edges()
-	
 		if  self.x > _R + self.radius then
-	    
 	    	self.x = -self.radius + _L
-	    
 	    elseif self.x < -self.radius +_L then
-
 	    	self.x = _R + self.radius
-	    
 	    end
 
 	    if self.y > _B + self.radius then
-
 	    	self.y = -self.radius + _T
-
 	    elseif self.y < -self.radius + _T then
-
 	      self.y = _B + self.radius
-
 	    end
-
 	end
 
 	return instance
-	
 end	
 
 return M

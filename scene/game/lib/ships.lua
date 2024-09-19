@@ -39,9 +39,7 @@ local vertices = {
 }
 
 local function vector2DFromAngle( angle )
-
 	return { x=mCos( mRad( angle ) ), y=mSin( mRad( angle ) ) }
-	
 end	
 
 -- ------------------------------------------------------------------------------------------ --
@@ -49,7 +47,6 @@ end
 -- ------------------------------------------------------------------------------------------ --
 
 local function addTrail( group )
-
 	-- Create tail
 	local tail   = display.newPolygon( group.parent, group.x, group.y, vertices )
 	tail:scale( -0.4, 0.4 )
@@ -57,7 +54,6 @@ local function addTrail( group )
 	tail:rotate( group.rotation )
 
 	transition.to( tail, { xScale=0, yScale=0, alpha=0, onComplete=display.remove } )
-
 end	
 
 ------------------------------------------------------------------------------------------------
@@ -74,7 +70,6 @@ end
 -- @return The ship ship.
 ------------------------------------------------------------------------------------------------
 function M.new( options )
-
 	-- Get the current scene group
 	local parent = display.currentStage
 
@@ -112,46 +107,33 @@ function M.new( options )
 	ship.strokeWidth = 3
 
 	function group:setRotation( angle )
-
 		self.rotationSpeed = angle
-
 	end	
 
 	function group:setAccelerate( value )
-
 		self.isAccelerating = value
-
 	end	
 
 	function group:accelerate()
-
 		local force = vector2DFromAngle( self.rotation  )
 		force.x = force.x * 0.007 
 		force.y = force.y * 0.007
 
 		self.velocity.x = self.velocity.x + force.x
 		self.velocity.y = self.velocity.y + force.y
-
 	end	
 
 	function group:turn( dt )
-
 		self:rotate( self.rotationSpeed * dt )
-
 	end	
 
 	function group:update( dt )
-
 		if self.isAccelerating then
-
 			self:accelerate()
 			--self.tail.isVisible = true
 			addTrail( group )
-
 		else
-		
 			--self.tail.isVisible = false	
-
 		end
 
 		self:translate( self.velocity.x * dt, self.velocity.y * dt )	
@@ -161,34 +143,22 @@ function M.new( options )
 	end	
 
 	function group.fire()
-		
 		local laser = lasers.new( { x=group.x, y=group.y, heading=group.rotation } )	
 		group.lasers[#group.lasers + 1] = laser
-
 	end
 
 	function group:edges()
-	
 		if  self.x > _R + self.radius then
-	    
 	    	self.x = -self.radius + _L
-	    
 	    elseif self.x < -self.radius + _L then
-
 	    	self.x = _R + self.radius
-	    
 	    end
 
 	    if self.y > _B + self.radius then
-
 	    	self.y = -self.radius + _T
-
 	    elseif self.y < -self.radius + _T then
-
 	      self.y = _B + self.radius
-
 	    end
-
 	end
 
 	-- Keyboard control
@@ -201,53 +171,37 @@ function M.new( options )
 		if ( phase == lastEvent.phase ) and ( name == lastEvent.keyName ) then return false end  -- Filter repeating keys
 
 		if phase == 'down' then
-
 			if 'right' == name then
-
 				group:setRotation( 0.1 )
-
 			elseif 'left' == name then
-
 				group:setRotation( -0.1 )
-
 			elseif 'up' == name then
-
 				group:setAccelerate( true )
-
 			elseif 'space' == name then
-
 				group.fire()
-
 			end
 
 		elseif phase == 'up' then
-			
 			group:setRotation( 0 )
 			group:setAccelerate( false )
-
 		end
 
 		lastEvent = event
-
 	end
 	
 	local function touch( event )
-
 		local phase = event.phase
 		if phase == 'ended' then
 
 			group.fire()
 
 		end
-
 	end	
 
 	function group:finalize()
-
 		-- On remove, cleanup ship, or call directly for non-visual
 		Runtime:removeEventListener( 'key', key )
 		Runtime:removeEventListener( 'touch', touch )
-
 	end
 
 	-- Add a finalize listener (for display objects only, comment out for non-visual)
@@ -263,7 +217,6 @@ function M.new( options )
 	parent:insert( group )
 
 	return group
-	
 end	
 
 return M

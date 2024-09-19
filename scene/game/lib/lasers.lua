@@ -34,15 +34,11 @@ local mSqrt   = math.sqrt
 -- ------------------------------------------------------------------------------------------ --
 
 local function vector2DFromAngle( angle )
-
 	return { x=mCos( mRad( angle ) ), y=mSin( mRad( angle ) ) }
-	
 end	
 
 local function distance( x1, y1, x2, y2 ) 
- 
 	return mSqrt( ( x1 - x2 ) * ( x1 - x2 ) + ( y1 - y2 ) * ( y1 - y2 ) ) 
-
 end	
 
 -- ------------------------------------------------------------------------------------------ --
@@ -61,7 +57,6 @@ end
 -- @return The new laser instance.
 ------------------------------------------------------------------------------------------------
 function M.new( options )
-
 	local _T  = display.screenOriginY
 	local _B  = display.viewableContentHeight - display.screenOriginY
 	local _L  = display.screenOriginX
@@ -87,44 +82,31 @@ function M.new( options )
 	instance.velocity = velocity
 
 	function instance:update( dt )
-	
 		self:translate( self.velocity.x  * dt, self.velocity.y  * dt )
-
 	end
 
 	function instance:hit( asteroid )
-	
 		local distanceFromObstacle = distance( self.x, self.y, asteroid.x, asteroid.y )
 		if distanceFromObstacle < asteroid.radius then
-
 			return true
-
 		else
-
 			return false
-
 		end	
-
 	end
 
 	function instance:offScreen()
-
 		if self.x > _R or self.x < _L then
 
       		return true
     	end
 	    if self.y > _B or self.y < _T then
-
 	      return true
-	    
 	    end
 
 	    return false
-
 	end	
 
 	return instance
-	
 end	
 
 return M
