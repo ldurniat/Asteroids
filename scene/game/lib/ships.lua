@@ -8,6 +8,12 @@
 ------------------------------------------------------------------------------------------------
 
 -- ------------------------------------------------------------------------------------------ --
+--                                 REQUIRED MODULES 	                                      --						
+-- ------------------------------------------------------------------------------------------ --
+
+local screen = require("scene.game.lib.screen")
+
+-- ------------------------------------------------------------------------------------------ --
 --                                 MODULE DECLARATION	                                      --						
 -- ------------------------------------------------------------------------------------------ --
 
@@ -71,11 +77,6 @@ end
 function M.new( options )
 	-- Get the current scene group
 	local parent = display.currentStage
-
-	local _T = display.screenOriginY
-	local _B = display.viewableContentHeight - display.screenOriginY
-	local _L = display.screenOriginX
-	local _R = display.viewableContentWidth - display.screenOriginX
 
 	-- Default options for ship
 	options = options or {}
@@ -147,16 +148,16 @@ function M.new( options )
 	end
 
 	function group:edges()
-		if  self.x > _R + self.radius then
-	    	self.x = -self.radius + _L
-	    elseif self.x < -self.radius + _L then
-	    	self.x = _R + self.radius
+		if  self.x > screen.RIGHT + self.radius then
+	    	self.x = -self.radius + screen.LEFT
+	    elseif self.x < -self.radius + screen.LEFT then
+	    	self.x = screen.RIGHT + self.radius
 	    end
 
-	    if self.y > _B + self.radius then
-	    	self.y = -self.radius + _T
-	    elseif self.y < -self.radius + _T then
-	      self.y = _B + self.radius
+	    if self.y > screen.BOTTOM + self.radius then
+	    	self.y = -self.radius + screen.TOP
+	    elseif self.y < -self.radius + screen.TOP then
+	      self.y = screen.BOTTOM + self.radius
 	    end
 	end
 

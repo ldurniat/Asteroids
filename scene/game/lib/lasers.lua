@@ -8,6 +8,12 @@
 ------------------------------------------------------------------------------------------------
 
 -- ------------------------------------------------------------------------------------------ --
+--                                 REQUIRED MODULES 	                                      --						
+-- ------------------------------------------------------------------------------------------ --
+
+local screen = require("scene.game.lib.screen")
+
+-- ------------------------------------------------------------------------------------------ --
 --                                 MODULE DECLARATION	                                      --						
 -- ------------------------------------------------------------------------------------------ --
 
@@ -57,11 +63,6 @@ end
 -- @return The new laser instance.
 ------------------------------------------------------------------------------------------------
 function M.new( options )
-	local _T  = display.screenOriginY
-	local _B  = display.viewableContentHeight - display.screenOriginY
-	local _L  = display.screenOriginX
-	local _R  = display.viewableContentWidth - display.screenOriginX
-
 	-- Get the current scene group
 	local parent = display.currentStage
 
@@ -95,11 +96,11 @@ function M.new( options )
 	end
 
 	function instance:offScreen()
-		if self.x > _R or self.x < _L then
+		if self.x > screen.RIGHT or self.x < screen.LEFT then
 
       		return true
     	end
-	    if self.y > _B or self.y < _T then
+	    if self.y > screen.BOTTOM or self.y < screen.TOP then
 	      return true
 	    end
 
