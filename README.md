@@ -1,5 +1,5 @@
 # Asteroids
-*Asteroids* is simple game for Corona SDK inspired by youtube video [Asteroids with p5.js](https://www.youtube.com/watch?v=hacZU523FyM).
+*Asteroids* is simple game for Corona SDK inspired by youtube video Asteroids with p5.js [part 1](https://www.youtube.com/watch?v=hacZU523FyM) and [part 2](https://www.youtube.com/watch?v=xTTuih7P0c0).
 
 ![Screenshot](https://i.imgur.com/v6V0vmZ.gif)
 
