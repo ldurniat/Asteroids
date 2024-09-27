@@ -143,7 +143,9 @@ function M.new( options )
 	end	
 
 	function group.fire()
-		local laser = lasers.new( { x=group.x, y=group.y, heading=group.rotation } )	
+		local x = group.x + mCos(mRad(group.rotation)) * group.radius
+		local y = group.y + mSin(mRad(group.rotation)) * group.radius
+		local laser = lasers.new( { x=x, y=y, heading=group.rotation } )
 		group.lasers[#group.lasers + 1] = laser
 	end
 
