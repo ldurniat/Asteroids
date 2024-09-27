@@ -55,7 +55,7 @@ local function addTrail( group )
 	-- Create tail
 	local tail   = display.newPolygon( group.parent, group.x, group.y, vertices )
 	tail:scale( -0.4, 0.4 )
-	tail:translate( -1.5 * group.radius * mCos( mRad( group.rotation ) ), -1.5 * group.radius * mSin( mRad( group.rotation ) ) )
+	tail:translate( group.radius * mCos( mRad( group.rotation + 180 ) ), group.radius * mSin( mRad( group.rotation  + 180 ) ) )
 	tail:rotate( group.rotation )
 
 	transition.to( tail, { xScale=0, yScale=0, alpha=0, onComplete=display.remove } )
