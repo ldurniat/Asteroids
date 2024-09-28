@@ -117,7 +117,7 @@ function M.new( options )
 		if self.isAccelerating then
 			self:accelerate()
 			--self.tail.isVisible = true
-			self:addTrail( parent )
+			self:addTrail()
 		else
 			--self.tail.isVisible = false	
 		end
@@ -149,12 +149,12 @@ function M.new( options )
 	    end
 	end
 
-	function ship:addTrail( group )
+	function ship:addTrail()
 		-- Create tail
-		local tail   = display.newPolygon( group.parent, group.x, group.y, vertices )
+		local tail   = display.newPolygon( parent, self.x, self.y, vertices )
 		tail:scale( -0.4, 0.4 )
-		tail:translate( group.radius * mCos( mRad( group.rotation + 180 ) ), group.radius * mSin( mRad( group.rotation  + 180 ) ) )
-		tail:rotate( group.rotation )
+		tail:translate( self.radius * mCos( mRad( self.rotation + 180 ) ), self.radius * mSin( mRad( self.rotation  + 180 ) ) )
+		tail:rotate( self.rotation )
 
 		transition.to( tail, { xScale=0, yScale=0, alpha=0, onComplete=display.remove } )
 	end	
