@@ -90,31 +90,31 @@ function M.new( options )
 	
 	for i=1, #vertices do vertices[i] = vertices[i] * radius end	
 
-	local group = display.newGroup()
-	group.x = x
-	group.y = y
-	-- Add basic properties
-	group.rotationSpeed = rotationSpeed
-	group.isAccelerating = isAccelerating
-	group.velocity = velocity
-	group.lasers = {}
-	group.radius = radius
-
 	-- Create equilateral triangle ship
-	local ship = display.newPolygon( group, 0, 0, vertices )
-	local black = { 0, 0, 0 }
-	ship.fill = black
+	local ship  = display.newPolygon( parent, 0, 0, vertices )
+	-- Set appearance
+	local black 	 = { 0, 0, 0 }
+	ship.fill 		 = black
 	ship.strokeWidth = 3
-
-	function group:setRotation( angle )
+	-- Set Position
+	ship.x = x
+	ship.y = y
+	-- Add basic properties
+	ship.rotationSpeed  = rotationSpeed
+	ship.isAccelerating = isAccelerating
+	ship.velocity 		= velocity
+	ship.lasers 		= {}
+	ship.radius 		= radius
+	
+	function ship:setRotation( angle )
 		self.rotationSpeed = angle
 	end	
 
-	function group:setAccelerate( value )
+	function ship:setAccelerate( value )
 		self.isAccelerating = value
 	end	
 
-	function group:accelerate()
+	function ship:accelerate()
 		local force = vector2DFromAngle( self.rotation  )
 		force.x = force.x * 0.007 
 		force.y = force.y * 0.007
@@ -123,15 +123,15 @@ function M.new( options )
 		self.velocity.y = self.velocity.y + force.y
 	end	
 
-	function group:turn( dt )
+	function ship:turn( dt )
 		self:rotate( self.rotationSpeed * dt )
 	end	
 
-	function group:update( dt )
+	function ship:update( dt )
 		if self.isAccelerating then
 			self:accelerate()
 			--self.tail.isVisible = true
-			addTrail( group )
+			addTrail( parent )
 		else
 			--self.tail.isVisible = false	
 		end
@@ -142,14 +142,14 @@ function M.new( options )
 
 	end	
 
-	function group.fire()
-		local x = group.x + mCos(mRad(group.rotation)) * group.radius
-		local y = group.y + mSin(mRad(group.rotation)) * group.radius
-		local laser = lasers.new( { x=x, y=y, heading=group.rotation } )
-		group.lasers[#group.lasers + 1] = laser
+	function ship.fire()
+		local x = ship.x + mCos(mRad(ship.rotation)) * ship.radius
+		local y = ship.y + mSin(mRad(ship.rotation)) * ship.radius
+		local laser = lasers.new( { x=x, y=y, heading=ship.rotation } )
+		ship.lasers[#ship.lasers + 1] = laser
 	end
 
-	function group:edges()
+	function ship:edges()
 		if  self.x > screen.RIGHT + self.radius then
 	    	self.x = -self.radius + screen.LEFT
 	    elseif self.x < -self.radius + screen.LEFT then
@@ -174,18 +174,18 @@ function M.new( options )
 
 		if phase == 'down' then
 			if 'right' == name then
-				group:setRotation( 0.1 )
+				ship:setRotation( 0.1 )
 			elseif 'left' == name then
-				group:setRotation( -0.1 )
+				ship:setRotation( -0.1 )
 			elseif 'up' == name then
-				group:setAccelerate( true )
+				ship:setAccelerate( true )
 			elseif 'space' == name then
-				group.fire()
+				ship.fire()
 			end
 
 		elseif phase == 'up' then
-			group:setRotation( 0 )
-			group:setAccelerate( false )
+			ship:setRotation( 0 )
+			ship:setAccelerate( false )
 		end
 
 		lastEvent = event
@@ -195,30 +195,25 @@ function M.new( options )
 		local phase = event.phase
 		if phase == 'ended' then
 
-			group.fire()
+			ship.fire()
 
 		end
 	end	
 
-	function group:finalize()
+	function ship:finalize()
 		-- On remove, cleanup ship, or call directly for non-visual
 		Runtime:removeEventListener( 'key', key )
 		Runtime:removeEventListener( 'touch', touch )
 	end
 
 	-- Add a finalize listener (for display objects only, comment out for non-visual)
-	group:addEventListener( 'finalize' )
+	ship:addEventListener( 'finalize' )
 
 	-- Add our key/joystick listeners
 	Runtime:addEventListener( 'key', key )	
 	Runtime:addEventListener( 'touch', touch )
 
-	-- Reference
-	group.ship = ship
-
-	parent:insert( group )
-
-	return group
+	return ship
 end	
 
 return M
