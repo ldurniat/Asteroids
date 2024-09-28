@@ -77,9 +77,9 @@ function M.new( options )
 	velocity.y = velocity.y * 0.3
 
 	local instance = display.newRect( parent, x, y, 5, 5 )
-	local black = { 0, 0, 0 }
-	instance.fill = black
-	instance.strokeWidth = 3
+	local white = { 1, 1, 1 }
+	instance.fill = white
+	instance.strokeWidth = 2
 	instance.velocity = velocity
 
 	function instance:update( dt )
