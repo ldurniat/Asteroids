@@ -47,20 +47,6 @@ local function vector2DFromAngle( angle )
 	return { x=mCos( mRad( angle ) ), y=mSin( mRad( angle ) ) }
 end	
 
--- ------------------------------------------------------------------------------------------ --
---                                 PUBLIC METHODS                                             --	
--- ------------------------------------------------------------------------------------------ --
-
-local function addTrail( group )
-	-- Create tail
-	local tail   = display.newPolygon( group.parent, group.x, group.y, vertices )
-	tail:scale( -0.4, 0.4 )
-	tail:translate( group.radius * mCos( mRad( group.rotation + 180 ) ), group.radius * mSin( mRad( group.rotation  + 180 ) ) )
-	tail:rotate( group.rotation )
-
-	transition.to( tail, { xScale=0, yScale=0, alpha=0, onComplete=display.remove } )
-end	
-
 ------------------------------------------------------------------------------------------------
 -- Constructor function of Ships module.
 --
@@ -131,7 +117,7 @@ function M.new( options )
 		if self.isAccelerating then
 			self:accelerate()
 			--self.tail.isVisible = true
-			addTrail( parent )
+			self:addTrail( parent )
 		else
 			--self.tail.isVisible = false	
 		end
@@ -162,6 +148,16 @@ function M.new( options )
 	      self.y = screen.BOTTOM + self.radius
 	    end
 	end
+
+	function ship:addTrail( group )
+		-- Create tail
+		local tail   = display.newPolygon( group.parent, group.x, group.y, vertices )
+		tail:scale( -0.4, 0.4 )
+		tail:translate( group.radius * mCos( mRad( group.rotation + 180 ) ), group.radius * mSin( mRad( group.rotation  + 180 ) ) )
+		tail:rotate( group.rotation )
+
+		transition.to( tail, { xScale=0, yScale=0, alpha=0, onComplete=display.remove } )
+	end	
 
 	-- Keyboard control
 	local lastEvent = {}
