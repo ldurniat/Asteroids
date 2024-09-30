@@ -74,7 +74,7 @@ local function enterFrame( event )
       asteroid = asteroids[i]
       asteroid:update( dt )
       asteroid:edges()
-      isShipDestroyed = ship.detectCollision(asteroid) or isShipDestroyed
+      isShipDestroyed = ship:detectCollision(asteroid) or isShipDestroyed
    end
 
    local lasers = ship.lasers
