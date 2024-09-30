@@ -47,6 +47,10 @@ local function vector2DFromAngle( angle )
 	return { x=mCos( mRad( angle ) ), y=mSin( mRad( angle ) ) }
 end	
 
+local function distance( x1, y1, x2, y2 ) 
+	return mSqrt( ( x1 - x2 ) * ( x1 - x2 ) + ( y1 - y2 ) * ( y1 - y2 ) ) 
+end	
+
 ------------------------------------------------------------------------------------------------
 -- Constructor function of Ships module.
 --
