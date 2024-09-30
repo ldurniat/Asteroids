@@ -159,6 +159,15 @@ function M.new( options )
 		transition.to( tail, { xScale=0, yScale=0, alpha=0, onComplete=display.remove } )
 	end	
 
+	function ship:detectCollision(asteroid)
+		local distanceFromAsteroid = distance( self.x, self.y, asteroid.x, asteroid.y )
+		if distanceFromObstacle < self.radius + asteroid.radius then
+			return true
+		else
+			return false
+		end	
+	end	
+
 	-- Keyboard control
 	local lastEvent = {}
 	local function key( event )
