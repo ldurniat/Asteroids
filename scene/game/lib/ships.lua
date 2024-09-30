@@ -166,7 +166,7 @@ function M.new( options )
 
 	function ship:detectCollision(asteroid)
 		local distanceFromAsteroid = distance( self.x, self.y, asteroid.x, asteroid.y )
-		if distanceFromObstacle < self.radius + asteroid.radius then
+		if distanceFromAsteroid < self.radius + asteroid.radius then
 			return true
 		else
 			return false
