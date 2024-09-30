@@ -33,6 +33,7 @@ local lasers   = require 'scene.game.lib.lasers'
 local mSin = math.sin
 local mCos = math.cos
 local mRad = math.rad
+local mSqrt = math.sqrt
 
 -- ------------------------------------------------------------------------------------------ --
 --                                 PRIVATE METHODS                                            --	
