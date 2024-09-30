@@ -69,10 +69,12 @@ local function enterFrame( event )
    ship:turn( dt )
    ship:update( dt )
 
+   local isShipDestroyed = false
    for i=1, #asteroids do
       asteroid = asteroids[i]
       asteroid:update( dt )
       asteroid:edges()
+      isShipDestroyed = ship.detectCollision(asteroid) or isShipDestroyed
    end
 
    local lasers = ship.lasers
